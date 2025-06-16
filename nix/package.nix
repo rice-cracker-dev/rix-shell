@@ -1,6 +1,5 @@
 # yoinked from https://github.com/Rexcrazy804/Zaphkiel/blob/master/users/Wrappers/quickshell.nix
 {
-  makeBinPath,
   symlinkJoin,
   makeWrapper,
   quickshell,
@@ -25,7 +24,7 @@ in
       fontDirectories = fonts;
     };
 
-    binPath = makeBinPath extraPackages;
+    binPath = lib.makeBinPath extraPackages;
 
     postBuild = ''
       wrapProgram $out/bin/quickshell \
