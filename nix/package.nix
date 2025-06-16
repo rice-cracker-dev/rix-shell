@@ -1,5 +1,6 @@
 # yoinked from https://github.com/Rexcrazy804/Zaphkiel/blob/master/users/Wrappers/quickshell.nix
 {
+  makeBinPath,
   symlinkJoin,
   makeWrapper,
   quickshell,
@@ -8,29 +9,31 @@
   configDir,
   qtDeps ? [],
   fonts ? [],
-}:
-symlinkJoin rec {
-  name = "qs-wrapper";
-  paths = [quickshell];
+  extraPackages ? [],
+}: let
+  inherit (import ./lib.nix lib) mkQmlPath;
+in
+  symlinkJoin rec {
+    name = "qs-wrapper";
+    paths = [quickshell];
 
-  buildInputs = [makeWrapper];
+    buildInputs = [makeWrapper];
 
-  qmlPath = lib.pipe qtDeps [
-    (builtins.map (lib: "${lib}/lib/qt-6/qml"))
-    (builtins.concatStringsSep ":")
-  ];
+    qmlPath = mkQmlPath qtDeps;
 
-  # requried when nix running directly
-  fontconfig = makeFontsConf {
-    fontDirectories = fonts;
-  };
+    fontconfig = makeFontsConf {
+      fontDirectories = fonts;
+    };
 
-  postBuild = ''
-    wrapProgram $out/bin/quickshell \
-      --set FONTCONFIG_FILE "${fontconfig}" \
-      --set QML2_IMPORT_PATH "${qmlPath}" \
-      --add-flags '-p ${configDir}'
-  '';
+    binPath = makeBinPath extraPackages;
 
-  meta.mainProgram = "quickshell";
-}
+    postBuild = ''
+      wrapProgram $out/bin/quickshell \
+        --set FONTCONFIG_FILE "${fontconfig}" \
+        --set QML2_IMPORT_PATH "${qmlPath}" \
+        --set PATH "${binPath}" \
+        --add-flags '-p ${configDir}'
+    '';
+
+    meta.mainProgram = "quickshell";
+  }

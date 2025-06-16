@@ -11,7 +11,11 @@
     };
   };
 
-  outputs = inputs @ {flake-parts, ...}:
+  outputs = inputs @ {
+    flake-parts,
+    nixpkgs,
+    ...
+  }:
     flake-parts.lib.mkFlake {inherit inputs;} {
       systems = ["x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin"];
       perSystem = {
@@ -20,20 +24,28 @@
         pkgs,
         ...
       }: let
+        inherit (import ./nix/lib.nix nixpkgs.lib) mkQmlPath;
         quickshell = inputs'.quickshell.packages.default;
+        extraPackages = with pkgs; [cava matugen];
         qtDeps = with pkgs.qt6; [qtbase qtdeclarative qtmultimedia];
         fonts = with pkgs; [noto-fonts];
       in {
         packages = {
           default = self'.packages.rix-shell;
           rix-shell = pkgs.callPackage ./nix/package.nix {
-            inherit qtDeps fonts quickshell;
+            inherit extraPackages qtDeps fonts quickshell;
             configDir = ./.;
           };
         };
 
         devShells.default = pkgs.mkShell {
-          packages = [quickshell] ++ qtDeps ++ fonts;
+          packages = [quickshell] ++ extraPackages ++ qtDeps ++ fonts;
+
+          FONTCONFIG_FILE = pkgs.makeFontsConf {
+            fontDirectories = fonts;
+          };
+
+          QML2_IMPORT_PATH = mkQmlPath (qtDeps ++ [quickshell]);
         };
       };
     };
