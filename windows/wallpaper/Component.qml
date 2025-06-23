@@ -1,7 +1,7 @@
-import "../../singletons/theme"
 import Quickshell
 import Quickshell.Wayland
 import QtQuick
+import "root:/singletons"
 
 Variants {
   model: Quickshell.screens

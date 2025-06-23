@@ -1,11 +1,17 @@
 import QtQuick
-import "../singletons/theme"
+import "../singletons"
 
 Text {
   color: Theme.color.on_background
 
   font {
-    pixelSize: 12
-    family: "Noto Sans"
+    pixelSize: 14
+    family: "Inter Variable"
+  }
+
+  Behavior on color {
+    ColorAnimation {
+      duration: 150
+    }
   }
 }

@@ -27,8 +27,12 @@
         inherit (import ./nix/lib.nix nixpkgs.lib) mkQmlPath;
         quickshell = inputs'.quickshell.packages.default;
         extraPackages = with pkgs; [cava matugen];
-        qtDeps = with pkgs.qt6; [qtbase qtdeclarative qtmultimedia];
-        fonts = with pkgs; [noto-fonts];
+        fonts = with pkgs; [inter noto-fonts];
+        qtDeps = with pkgs.qt6; [
+          qtbase
+          qtdeclarative
+          qtmultimedia
+        ];
       in {
         packages = {
           default = self'.packages.rix-shell;

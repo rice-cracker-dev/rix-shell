@@ -1,5 +1,5 @@
 import Quickshell
-import "../singletons/theme"
+import "../singletons"
 
 LazyLoader {
   loading: Theme.loaded

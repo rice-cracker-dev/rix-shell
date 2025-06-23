@@ -2,7 +2,6 @@ pragma Singleton
 import QtQuick
 import Quickshell
 import Quickshell.Io
-import "root:/lib"
 
 Singleton {
   id: main
@@ -14,11 +13,12 @@ Singleton {
 
   Process {
     id: cavaProc
+    readonly property string configPath: Qt.resolvedUrl('./cava.sh').toString().slice(7)
     readonly property int min: 0
     readonly property int max: 1000
 
     running: true
-    command: ['bash', `${Quickshell.shellRoot}/windows/cava/cava.sh`, main.count]
+    command: ['bash', configPath, main.count]
 
     stdout: SplitParser {
       onRead: line => {
