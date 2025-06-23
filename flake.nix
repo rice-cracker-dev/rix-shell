@@ -26,7 +26,7 @@
       }: let
         inherit (import ./nix/lib.nix nixpkgs.lib) mkQmlPath;
         quickshell = inputs'.quickshell.packages.default;
-        extraPackages = with pkgs; [cava matugen];
+        extraPackages = with pkgs; [cava matugen networkmanager];
         fonts = with pkgs; [inter noto-fonts];
         qtDeps = with pkgs.qt6; [
           qtbase
