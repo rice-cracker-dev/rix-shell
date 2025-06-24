@@ -19,6 +19,16 @@ BarPanelItem {
       inputField.text = "";
       root.panel.selectedPanel = root;
     }
+
+    function close(): void {
+      if (root.isSelected) {
+        root.panel.selectedPanel = null;
+      }
+    }
+
+    function toggle(): void {
+      root.panel.togglePanel(root);
+    }
   }
 
   Item {
