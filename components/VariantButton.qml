@@ -1,5 +1,6 @@
 import QtQuick
 import "root:/singletons"
+import "root:/singletons/utils"
 
 Button {
   id: root
@@ -8,7 +9,7 @@ Button {
   property real variantIntensity: ghost ? -0.05 : 0.1
   readonly property var colorPair: Theme.getColorPair(variant)
 
-  backgroundColor: ghost ? 'transparent' : colorPair[0]
+  backgroundColor: ghost ? Color.colorA(Theme.color.surface_variant, 0) : colorPair[0]
   color: ghost ? Theme.color.on_background : colorPair[1]
 
   states: [

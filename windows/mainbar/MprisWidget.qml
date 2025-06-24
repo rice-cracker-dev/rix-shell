@@ -13,6 +13,8 @@ WrapperRectangle {
   readonly property url iconSkipNext: Qt.resolvedUrl("root:/assets/icons/skip-next.svg")
   readonly property url iconPause: Qt.resolvedUrl("root:/assets/icons/pause.svg")
   readonly property url iconPlay: Qt.resolvedUrl("root:/assets/icons/play.svg")
+  readonly property url iconMusicNote: Qt.resolvedUrl("root:/assets/icons/music-note.svg")
+  readonly property url iconMusicNoteOff: Qt.resolvedUrl("root:/assets/icons/music-note-off.svg")
 
   color: "transparent"
   radius: 9999
@@ -51,10 +53,25 @@ WrapperRectangle {
     }
 
     Icon {
-      icon: Qt.resolvedUrl("root:/assets/icons/music-note.svg")
-      size: 14
+      id: noteIcon
+
+      icon: !!player ? root.iconMusicNote : root.iconMusicNoteOff
+      size: 16
       color: Theme.color.on_background
       anchors.centerIn: progress
+
+      states: State {
+        when: !!root.player
+        PropertyChanges {
+          noteIcon.size: 12
+        }
+      }
+
+      Behavior on size {
+        NumberAnimation {
+          duration: 150
+        }
+      }
     }
 
     Item {

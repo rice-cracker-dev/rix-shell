@@ -5,8 +5,8 @@ Text {
   color: Theme.color.on_background
 
   font {
-    pixelSize: 14
-    family: "Inter Variable"
+    pixelSize: Theme.font.pixelSize
+    family: Theme.font.family
   }
 
   Behavior on color {

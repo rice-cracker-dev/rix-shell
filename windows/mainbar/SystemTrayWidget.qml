@@ -3,10 +3,7 @@ import QtQuick
 import QtQuick.Layouts
 import "root:/components"
 
-ColumnLayout {
-  spacing: 4
-
-  Repeater {
+Repeater {
     model: SystemTray.items
 
     delegate: MouseArea {
@@ -16,6 +13,7 @@ ColumnLayout {
       implicitWidth: button.width
       implicitHeight: button.height
       acceptedButtons: Qt.LeftButton | Qt.RightButton
+      Layout.alignment: Qt.AlignHCenter
 
       onClicked: event => {
         if (event.button === Qt.LeftButton) {
@@ -25,18 +23,9 @@ ColumnLayout {
         }
       }
 
-      BarButton {
+      BarIconButton {
         id: button
-
-        Layout.alignment: Qt.AlignHCenter
-        padding: 8
-
-        contentItem: Icon {
-          size: 16
-          color: button.color
-          icon: root.modelData.icon
-        }
+        iconUrl: root.modelData.icon
       }
     }
   }
-}

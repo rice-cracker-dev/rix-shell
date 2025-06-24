@@ -30,7 +30,7 @@ in
       wrapProgram $out/bin/quickshell \
         --set FONTCONFIG_FILE "${fontconfig}" \
         --set QML2_IMPORT_PATH "${qmlPath}" \
-        --set PATH "${binPath}" \
+        --prefix PATH : ${binPath} \
         --add-flags '-p ${configDir}'
     '';
 
