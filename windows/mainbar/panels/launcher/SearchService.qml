@@ -53,8 +53,6 @@ Singleton {
     source: Qt.resolvedUrl("./search_emoji.mjs")
 
     onMessage: result => {
-      console.log(JSON.stringify(result));
-
       if (result.type === "init") {
         initialized = true;
       } else if (result.type === "result") {

@@ -67,11 +67,6 @@ PanelWindow {
         top: root.top
         bottom: root.bottom
       }
-
-      Rectangle {
-        anchors.fill: parent
-        color: Qt.rgba(255, 0, 0, 0.25)
-      }
     }
 
     Item {
