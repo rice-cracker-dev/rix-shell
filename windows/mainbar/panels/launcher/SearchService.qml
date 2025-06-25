@@ -8,7 +8,8 @@ import "root:/lib/url.js" as Url
 Singleton {
   id: root
   property list<string> pathPrograms: []
-  readonly property var emojis: JSON.parse(jsonFile.text())
+  property list<var> emojiResult: []
+  readonly property bool ready: emojiWorker.initialized
   readonly property var items: {
     const applications = DesktopEntries.applications.values.map(e => {
       return {
@@ -21,47 +22,58 @@ Singleton {
           url: Quickshell.iconPath(e.icon),
           color: true
         },
-        score: 10,
         namePrepared: Fuzzysort.prepare(e.name),
         keywordsPrepared: Fuzzysort.prepare(e.keywords.join())
       };
     });
 
-    const preparedEmojis = emojis.map(e => {
-      return {
-        name: e.name,
-        description: e.en_keywords.join(', '),
-        section: "Emojis",
-        action: () => (Quickshell.clipboardText = e.characters),
-        icon: {
-          text: e.characters,
-          url: null,
-          color: false
-        },
-        score: 1,
-        namePrepared: Fuzzysort.prepare(e.name),
-        keywordsPrepared: Fuzzysort.prepare(e.en_keywords.join())
-      };
-    });
-
-    return [...applications, ...preparedEmojis];
+    return [...applications];
   }
 
-  function search(query: string, extraItems = []): var {
-    const result = Fuzzysort.go(query, [...items, ...extraItems], {
+  function search(query: string): var {
+    const result = Fuzzysort.go(query, [...items], {
       keys: ["namePrepared", "keywordsPrepared"],
       limit: 50,
-      threshold: 0.5,
-      scoreFn: r => r.score * (r.obj.score ?? 1)
+      threshold: 0.5
     }).map(item => item.obj);
 
     return result;
+  }
+
+  function beginEmojiSearch(query: string): void {
+    emojiWorker.sendMessage({
+      type: "search",
+      message: query
+    });
+  }
+
+  WorkerScript {
+    id: emojiWorker
+    property bool initialized: false
+    source: Qt.resolvedUrl("./search_emoji.mjs")
+
+    onMessage: result => {
+      console.log(JSON.stringify(result));
+
+      if (result.type === "init") {
+        initialized = true;
+      } else if (result.type === "result") {
+        root.emojiResult = result.message;
+      }
+    }
   }
 
   FileView {
     id: jsonFile
     path: Qt.resolvedUrl('./emoji.json')
     blockLoading: true
+
+    onLoaded: {
+      emojiWorker.sendMessage({
+        type: "loadEmoji",
+        message: JSON.parse(this.text())
+      });
+    }
   }
 
   Process {

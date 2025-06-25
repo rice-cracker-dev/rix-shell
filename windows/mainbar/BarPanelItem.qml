@@ -5,6 +5,7 @@ Item {
   required property BarPanel panel
   readonly property bool isSelected: panel.selectedPanel === root
 
+  enabled: isSelected
   opacity: 0
   anchors.fill: parent
 

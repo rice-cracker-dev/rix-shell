@@ -1,5 +1,6 @@
 import Quickshell
 import QtQuick
+import "root:/singletons"
 
 Item {
   property alias selectedPanel: persist.selectedPanel
@@ -13,9 +14,14 @@ Item {
     property Item selectedPanel
   }
 
-  Behavior on width {
+  transitions: Transition {
     NumberAnimation {
-      duration: 150
+      property: "width"
+      duration: 300
+      easing {
+        type: Easing.BezierSpline
+        bezierCurve: Theme.easingCurve
+      }
     }
   }
 }

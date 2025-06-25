@@ -26,7 +26,7 @@
       }: let
         inherit (import ./nix/lib.nix nixpkgs.lib) mkQmlPath;
         quickshell = inputs'.quickshell.packages.default;
-        extraPackages = with pkgs; [cava matugen networkmanager python3 libqalculate];
+        extraPackages = with pkgs; [cava matugen networkmanager python3 libqalculate wl-screenrec];
         fonts = with pkgs; [inter noto-fonts];
         qtDeps = with pkgs.qt6; [
           qtbase

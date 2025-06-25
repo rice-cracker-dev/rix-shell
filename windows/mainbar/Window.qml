@@ -25,11 +25,11 @@ PanelWindow {
   exclusionMode: ExclusionMode.Normal
   exclusiveZone: barWidth - window.barMargins
   color: 'transparent'
-  visible: Theme.loaded
-  WlrLayershell.keyboardFocus: barPanel.selectedPanel === launcherPanel ? WlrKeyboardFocus.Exclusive : WlrLayershell.None
+  visible: Theme.loaded && Launcher.SearchService.ready
+  WlrLayershell.keyboardFocus: WlrLayershell.OnDemand
 
   mask: Region {
-    item: contentArea
+    item: barPanel.selectedPanel === null ? contentArea : window
   }
 
   Item {
@@ -49,6 +49,29 @@ PanelWindow {
       source: border
       shadowEnabled: true
       shadowColor: "#000000"
+    }
+
+    MouseArea {
+      id: panelOverlay
+
+      visible: barPanel.selectedPanel !== null
+      enabled: barPanel.selectedPanel !== null
+
+      onPressed: {
+        barPanel.selectedPanel = null;
+      }
+
+      anchors {
+        left: root.left
+        right: contentArea.left
+        top: root.top
+        bottom: root.bottom
+      }
+
+      Rectangle {
+        anchors.fill: parent
+        color: Qt.rgba(255, 0, 0, 0.25)
+      }
     }
 
     Item {
@@ -135,12 +158,6 @@ PanelWindow {
           when: !!barPanel.selectedPanel
           PropertyChanges {
             barPanel.width: 400
-          }
-        }
-
-        Behavior on width {
-          NumberAnimation {
-            duration: 150
           }
         }
 

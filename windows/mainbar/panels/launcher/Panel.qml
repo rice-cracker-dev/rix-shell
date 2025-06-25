@@ -1,6 +1,7 @@
 import Quickshell
 import Quickshell.Io
 import Quickshell.Widgets
+import Quickshell.Hyprland
 import QtQuick
 import "root:/components"
 import "root:/singletons"
@@ -12,11 +13,22 @@ BarPanelItem {
 
   anchors.fill: parent
 
+  onIsSelectedChanged: {
+    if (isSelected) {
+      inputField.text = "";
+    }
+  }
+
+  HyprlandFocusGrab {
+    id: focusGrab
+    windows: [this.QsWindow.window]
+    active: root.isSelected
+  }
+
   IpcHandler {
     target: "launcher"
 
     function open(): void {
-      inputField.text = "";
       root.panel.selectedPanel = root;
     }
 
@@ -58,6 +70,7 @@ BarPanelItem {
       readonly property regexp urlRegex: new RegExp("^https?:\/\/.+$")
       readonly property bool isUrl: urlRegex.test(this.text)
 
+      focus: root.isSelected
       radius: root.radius
       placeholderText: "Search"
       Keys.onEscapePressed: root.panel.selectedPanel = null
@@ -71,15 +84,10 @@ BarPanelItem {
       }
 
       onTextChanged: {
+        SearchService.beginEmojiSearch(this.text);
+
         if (!isUrl) {
           CalcService.calculateExpression(this.text);
-        }
-      }
-
-      states: State {
-        when: root.isSelected
-        PropertyChanges {
-          inputField.focus: true
         }
       }
 
@@ -106,7 +114,6 @@ BarPanelItem {
     }
 
     model: ScriptModel {
-
       function optional(condition: bool, value: var): list<var> {
         return condition ? [value] : [];
       }
@@ -164,7 +171,7 @@ BarPanelItem {
           }
         });
 
-        return [...SearchService.search(inputField.text), ...calculation, ...runCommand, ...openUrl, searchTheWeb];
+        return [...SearchService.search(inputField.text), ...SearchService.emojiResult, ...calculation, ...runCommand, ...openUrl, searchTheWeb];
       }
 
       onValuesChanged: {

@@ -18,10 +18,13 @@ Singleton {
   readonly property alias wallpaperSource: persist.wallpaperSource
   readonly property var color: matugenProc.output?.colors[persist.type] ?? null
   readonly property bool loaded: color != null
+
   readonly property QtObject font: QtObject {
     readonly property int pixelSize: 14
     readonly property string family: "Inter Variable"
   }
+
+  readonly property list<real> easingCurve: [0.19, 1, 0.22, 1, 1, 1]
 
   function toggleTheme(): void {
     persist.type = persist.type === "light" ? "dark" : "light";
