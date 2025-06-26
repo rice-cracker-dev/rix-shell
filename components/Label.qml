@@ -9,8 +9,9 @@ Text {
     family: Theme.font.family
   }
 
-  Behavior on color {
+  transitions: Transition {
     ColorAnimation {
+      properties: "color"
       duration: 150
     }
   }

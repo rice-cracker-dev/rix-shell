@@ -24,8 +24,8 @@ Button {
     State {
       when: root.pressed || root.active
       PropertyChanges {
-        root.backgroundColor: Theme.getColorAlt(root.variant, root.variantIntensity * 2)
-        root.color: Theme.getOnColorAlt(root.variant, root.variantIntensity * 2)
+        root.backgroundColor: root.ghost ? colorPair[0] : Theme.getColorAlt(root.variant, root.variantIntensity * 2)
+        root.color: root.ghost ? colorPair[1] : Theme.getOnColorAlt(root.variant, root.variantIntensity * 2)
       }
     },
     State {

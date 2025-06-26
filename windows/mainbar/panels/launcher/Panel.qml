@@ -1,7 +1,6 @@
 import Quickshell
 import Quickshell.Io
 import Quickshell.Widgets
-import Quickshell.Hyprland
 import QtQuick
 import "root:/components"
 import "root:/singletons"
@@ -11,18 +10,10 @@ BarPanelItem {
   id: root
   property int radius: 16
 
-  anchors.fill: parent
-
   onIsSelectedChanged: {
     if (isSelected) {
       inputField.text = "";
     }
-  }
-
-  HyprlandFocusGrab {
-    id: focusGrab
-    windows: [this.QsWindow.window]
-    active: root.isSelected
   }
 
   IpcHandler {
@@ -119,8 +110,9 @@ BarPanelItem {
       }
 
       values: {
+        // return the full application list if no input
         if (inputField.text.trim() === "") {
-          return [];
+          return SearchService.search("");
         }
 
         const openUrl = optional(inputField.isUrl, {
@@ -171,7 +163,7 @@ BarPanelItem {
           }
         });
 
-        return [...SearchService.search(inputField.text), ...SearchService.emojiResult, ...calculation, ...runCommand, ...openUrl, searchTheWeb];
+        return [...SearchService.search(inputField.text), ...runCommand, ...SearchService.emojiResult, ...calculation, ...openUrl, searchTheWeb];
       }
 
       onValuesChanged: {

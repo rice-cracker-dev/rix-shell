@@ -17,14 +17,9 @@ Button {
     radius: root.radius
   }
 
-  Behavior on backgroundColor {
+  transitions: Transition {
     ColorAnimation {
-      duration: 150
-    }
-  }
-
-  Behavior on color {
-    ColorAnimation {
+      properties: "backgroundColor,color"
       duration: 150
     }
   }

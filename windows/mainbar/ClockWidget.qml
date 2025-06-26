@@ -4,6 +4,7 @@ import "root:/components"
 
 Item {
   id: root
+  property color color
 
   implicitWidth: childrenRect.width
   implicitHeight: childrenRect.height
@@ -15,6 +16,7 @@ Item {
   Label {
     id: hourClock
     text: Qt.formatTime(clock.date, 'HH')
+    color: root.color
 
     font {
       pixelSize: 14
@@ -25,6 +27,7 @@ Item {
   Label {
     id: minuteClock
     text: Qt.formatTime(clock.date, 'mm')
+    color: root.color
 
     font {
       pixelSize: 14

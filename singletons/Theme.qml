@@ -179,7 +179,7 @@ Singleton {
     onWallpaperPathChanged: {
       if (wallpaperPath) {
         this.signal(15);
-        this.command = ['matugen', 'image', wallpaperPath, '-j', 'hex'];
+        this.command = ['matugen', '--contrast', '0.75', 'image', wallpaperPath, '-j', 'hex'];
         this.running = true;
       }
     }

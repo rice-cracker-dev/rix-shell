@@ -43,19 +43,27 @@ WrapperRectangle {
     implicitHeight: childrenRect.height
     hoverEnabled: true
 
+    Timer {
+      running: !!root.player?.isPlaying
+      interval: 1000
+      triggeredOnStart: true
+      repeat: true
+      onTriggered: root.player?.positionChanged()
+    }
+
     CircularProgressBar {
       id: progress
 
       size: 28
       lineWidth: 3
-      value: player ? (player.position / player.length) : 0
-      visible: !!player
+      value: root.player ? (root.player.position / root.player.length) : 0
+      visible: !!root.player
     }
 
     Icon {
       id: noteIcon
 
-      icon: !!player ? root.iconMusicNote : root.iconMusicNoteOff
+      icon: !!root.player ? root.iconMusicNote : root.iconMusicNoteOff
       size: 16
       color: Theme.color.on_background
       anchors.centerIn: progress

@@ -2,14 +2,14 @@ pragma Singleton
 import Quickshell
 import Quickshell.Io
 import QtQuick
-import "root:/lib/fuzzysort.js" as Fuzzysort
+import "root:/lib/fuzzysort-esm.mjs" as Fuzzysort
 import "root:/lib/url.js" as Url
 
 Singleton {
   id: root
   property list<string> pathPrograms: []
   property list<var> emojiResult: []
-  readonly property bool ready: emojiWorker.initialized
+  readonly property bool loaded: emojiSearchProcess.initialized
   readonly property var items: {
     const applications = DesktopEntries.applications.values.map(e => {
       return {
@@ -34,43 +34,49 @@ Singleton {
     const result = Fuzzysort.go(query, [...items], {
       keys: ["namePrepared", "keywordsPrepared"],
       limit: 50,
-      threshold: 0.5
+      threshold: 0.5,
+      all: true
     }).map(item => item.obj);
 
     return result;
   }
 
   function beginEmojiSearch(query: string): void {
-    emojiWorker.sendMessage({
-      type: "search",
-      message: query
-    });
-  }
-
-  WorkerScript {
-    id: emojiWorker
-    property bool initialized: false
-    source: Qt.resolvedUrl("./search_emoji.mjs")
-
-    onMessage: result => {
-      if (result.type === "init") {
-        initialized = true;
-      } else if (result.type === "result") {
-        root.emojiResult = result.message;
-      }
+    if (root.loaded) {
+      emojiSearchProcess.write(`${query}\n`);
     }
   }
 
-  FileView {
-    id: jsonFile
-    path: Qt.resolvedUrl('./emoji.json')
-    blockLoading: true
+  Process {
+    id: emojiSearchProcess
+    property bool initialized: false
 
-    onLoaded: {
-      emojiWorker.sendMessage({
-        type: "loadEmoji",
-        message: JSON.parse(this.text())
-      });
+    running: true
+    stdinEnabled: true
+    command: ["python", Url.urlToFilePath(Qt.resolvedUrl("root:/scripts/search_emoji.py"))]
+
+    stdout: SplitParser {
+      onRead: line => {
+        const json = JSON.parse(line);
+
+        if (json.type === "init") {
+          emojiSearchProcess.initialized = true;
+        } else if (json.type === "result") {
+          root.emojiResult = json.message.map(e => {
+            return {
+              name: e.name,
+              description: e.en_keywords.join(", "),
+              section: "Emojis",
+              action: () => (Quickshell.clipboardText = e.characters),
+              icon: {
+                text: e.characters,
+                url: null,
+                color: false
+              }
+            };
+          });
+        }
+      }
     }
   }
 

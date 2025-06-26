@@ -7,6 +7,7 @@ import "root:/components"
 import "root:/singletons"
 import "root:/singletons/utils"
 import "./panels/launcher" as Launcher
+import "./panels/main" as Main
 
 PanelWindow {
   id: window
@@ -25,11 +26,11 @@ PanelWindow {
   exclusionMode: ExclusionMode.Normal
   exclusiveZone: barWidth - window.barMargins
   color: 'transparent'
-  visible: Theme.loaded && Launcher.SearchService.ready
+  visible: Theme.loaded
   WlrLayershell.keyboardFocus: WlrLayershell.OnDemand
 
   mask: Region {
-    item: barPanel.selectedPanel === null ? contentArea : window
+    item: contentArea
   }
 
   Item {
@@ -54,7 +55,6 @@ PanelWindow {
     MouseArea {
       id: panelOverlay
 
-      visible: barPanel.selectedPanel !== null
       enabled: barPanel.selectedPanel !== null
 
       onPressed: {
@@ -62,10 +62,24 @@ PanelWindow {
       }
 
       anchors {
-        left: root.left
-        right: contentArea.left
-        top: root.top
-        bottom: root.bottom
+        fill: parent
+      }
+
+      Rectangle {
+        id: panelOverlayRect
+        
+        anchors.fill: parent
+        color: "black"
+        opacity: 0
+
+        states: State {
+          when: barPanel.selectedPanel !== null
+          PropertyChanges { panelOverlayRect.opacity: 0.25 }
+        }
+
+        transitions: Transition {
+          NumberAnimation { properties: "opacity"; duration: 150 }
+        }
       }
     }
 
@@ -112,25 +126,35 @@ PanelWindow {
             }
           }
 
-          DotSeparator {
+          Circle {
             Layout.alignment: Qt.AlignHCenter
             opacity: 0.5
           }
 
           BarButton {
+            id: mainButton
+            variant: "primary"
+            active: barPanel.selectedPanel === mainPanel
             padding: 8
             Layout.alignment: Qt.AlignHCenter
+
+            onClicked: {
+              barPanel.togglePanel(mainPanel);
+            }
 
             contentItem: ColumnLayout {
               spacing: 12
 
               NetworkWidget {
+                color: mainButton.color
                 Layout.alignment: Qt.AlignHCenter
               }
               PipewireWidget {
+                color: mainButton.color
                 Layout.alignment: Qt.AlignHCenter
               }
               ClockWidget {
+                color: mainButton.color
                 Layout.alignment: Qt.AlignHCenter
                 Layout.topMargin: 8
               }
@@ -156,16 +180,12 @@ PanelWindow {
           }
         }
 
-        Item {
-          anchors {
-            fill: barPanel
-            margins: 8
-          }
+        Main.Panel {
+          id: mainPanel
+        }
 
-          Launcher.Panel {
-            id: launcherPanel
-            panel: barPanel
-          }
+        Launcher.Panel {
+          id: launcherPanel
         }
       }
     }
