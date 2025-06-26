@@ -1,5 +1,6 @@
 import Quickshell
 import Quickshell.Wayland
+import Quickshell.Hyprland
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Effects
@@ -23,19 +24,29 @@ PanelWindow {
 
   screen: Quickshell.screens.values[0]
   implicitWidth: this.screen.width
-  exclusionMode: ExclusionMode.Normal
   exclusiveZone: barWidth - window.barMargins
   color: 'transparent'
   visible: Theme.loaded
-  WlrLayershell.keyboardFocus: WlrLayershell.OnDemand
 
-  mask: Region {
-    item: contentArea
+  HyprlandFocusGrab {
+    id: focusGrab
+    windows: [window]
+    active: false
   }
 
-  Item {
+  mask: Region {
+    item: root.selectedPanel ? root : contentArea
+  }
+
+  FocusScope {
     id: root
     anchors.fill: parent
+
+    Keys.onEscapePressed: {
+      if (barPanel.selectedPanel !== null) {
+        barPanel.selectedPanel = null;
+      }
+    }
 
     ScreenBorder {
       id: border
@@ -55,11 +66,7 @@ PanelWindow {
     MouseArea {
       id: panelOverlay
 
-      enabled: barPanel.selectedPanel !== null
-
-      onPressed: {
-        barPanel.selectedPanel = null;
-      }
+      onPressed: (barPanel.selectedPanel = null)
 
       anchors {
         fill: parent
@@ -67,18 +74,23 @@ PanelWindow {
 
       Rectangle {
         id: panelOverlayRect
-        
+
         anchors.fill: parent
         color: "black"
         opacity: 0
 
         states: State {
           when: barPanel.selectedPanel !== null
-          PropertyChanges { panelOverlayRect.opacity: 0.25 }
+          PropertyChanges {
+            panelOverlayRect.opacity: 0.25
+          }
         }
 
         transitions: Transition {
-          NumberAnimation { properties: "opacity"; duration: 150 }
+          NumberAnimation {
+            properties: "opacity"
+            duration: 150
+          }
         }
       }
     }
@@ -171,6 +183,10 @@ PanelWindow {
           top: contentArea.top
           bottom: contentArea.bottom
           right: barRoot.left
+        }
+
+        onSelectedPanelChanged: {
+          focusGrab.active = selectedPanel !== null;
         }
 
         states: State {

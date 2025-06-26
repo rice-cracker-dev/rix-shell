@@ -45,6 +45,9 @@ Item {
   }
 
   ListView {
+    spacing: 16
+    clip: true
+
     anchors {
       left: root.left
       right: root.right
@@ -65,39 +68,94 @@ Item {
       implicitHeight: childrenRect.height
       clip: true
 
-      Icon {
-        id: icon
+      Item {
+        id: image
+        property int size: itemRoot.modelData.image ? 48 : 0
 
-        icon: itemRoot.modelData.image
-        size: 36
-        colorEnabled: false
-      }
-
-      Label {
-        id: summaryLabel
-
-        text: itemRoot.modelData.summary
-        font.weight: 500
-        elide: Text.ElideRight
+        visible: !!itemRoot.modelData.image
+        implicitWidth: size
+        implicitHeight: size
 
         anchors {
-          leftMargin: 16
-          left: icon.right
+          top: itemRoot.top
           right: itemRoot.right
+        }
+
+        Image {
+          anchors.fill: parent
+
+          source: itemRoot.modelData.image
+
+          sourceSize {
+            width: image.width
+            height: image.height
+          }
+        }
+      }
+
+      Item {
+        id: itemApp
+        implicitHeight: childrenRect.height
+        opacity: 0.5
+
+        anchors {
+          bottom: labelSummary.top
+          left: parent.left
+          right: image.visible ? image.left : itemRoot.right
+          rightMargin: image.visible ? 8 : 0
+        }
+
+        Icon {
+          id: appIcon
+          icon: Quickshell.iconPath(itemRoot.modelData.appIcon)
+          size: !!itemRoot.modelData.appIcon ? 16 : 0
+          color: appLabel.color
+          anchors.left: parent.left
+        }
+
+        Label {
+          id: appLabel
+          text: itemRoot.modelData.appName
+
+          anchors {
+            leftMargin: !!itemRoot.modelData.appIcon ? 8 : 0
+            left: appIcon.right
+          }
         }
       }
 
       Label {
-        text: itemRoot.modelData.body
-        textFormat: Text.MarkdownText
+        id: labelSummary
 
-        opacity: 0.5
+        text: itemRoot.modelData.summary
+        elide: Text.ElideRight
+
+        font {
+          weight: 500
+          pixelSize: 16
+        }
 
         anchors {
-          left: summaryLabel.left
-          right: summaryLabel.right
-          top: summaryLabel.bottom
-          topMargin: 4
+          bottom: image.visible ? image.bottom : null
+          left: itemRoot.left
+          right: image.visible ? image.left : itemRoot.right
+          rightMargin: !!image.visible ? 8 : 0
+        }
+      }
+
+      Label {
+        id: labelBody
+
+        text: itemRoot.modelData.body
+        textFormat: Text.MarkdownText
+        wrapMode: Text.Wrap
+        opacity: 0.75
+
+        anchors {
+          topMargin: image.visible ? 8 : 0
+          top: labelSummary.bottom
+          left: itemRoot.left
+          right: itemRoot.right
         }
       }
     }

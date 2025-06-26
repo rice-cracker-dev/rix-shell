@@ -64,9 +64,8 @@ BarPanelItem {
       focus: root.isSelected
       radius: root.radius
       placeholderText: "Search"
-      Keys.onEscapePressed: root.panel.selectedPanel = null
-      Keys.forwardTo: [list]
       leftPadding: 28
+      Keys.forwardTo: [list]
 
       onAccepted: {
         if (list.currentItem) {
@@ -171,24 +170,24 @@ BarPanelItem {
       }
     }
 
-    highlight: Rectangle {
-      color: Theme.color.surface_variant
-      radius: root.radius
-    }
-
-    delegate: WrapperMouseArea {
+    delegate: VariantButton {
       id: rootItem
+      required property int index
       required property var modelData
 
       implicitWidth: ListView.view.width
-      margin: 8
+      padding: 8
+      ghost: true
+      active: list.currentIndex === index
+      variant: "primary"
+      transitions: []
 
       onClicked: {
         modelData.action();
         root.panel.selectedPanel = null;
       }
 
-      Item {
+      contentItem: Item {
         id: visualItem
         implicitHeight: childrenRect.height
 
@@ -204,6 +203,7 @@ BarPanelItem {
         Label {
           anchors.fill: iconItem
           text: rootItem.modelData.icon.text ?? ""
+          color: nameItem.color
           font.pixelSize: iconItem.size
           visible: rootItem.modelData.icon.text != null
         }
@@ -214,6 +214,7 @@ BarPanelItem {
           text: rootItem.modelData.description ?? ""
           elide: Text.ElideRight
           opacity: 0.5
+          color: nameItem.color
 
           anchors {
             leftMargin: 8
@@ -226,6 +227,7 @@ BarPanelItem {
         Label {
           id: nameItem
           text: rootItem.modelData.name
+          color: rootItem.color
 
           anchors {
             leftMargin: 8

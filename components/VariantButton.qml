@@ -7,6 +7,7 @@ Button {
   property string variant: "surface_variant"
   property bool ghost: false
   property real variantIntensity: ghost ? -0.05 : 0.1
+  property list<State> extraStates: []
   readonly property var colorPair: Theme.getColorPair(variant)
 
   backgroundColor: ghost ? Color.colorA(Theme.color.surface_variant, 0) : colorPair[0]
@@ -24,6 +25,7 @@ Button {
     State {
       when: root.pressed || root.active
       PropertyChanges {
+        root.backgroundOpacity: 1
         root.backgroundColor: root.ghost ? colorPair[0] : Theme.getColorAlt(root.variant, root.variantIntensity * 2)
         root.color: root.ghost ? colorPair[1] : Theme.getOnColorAlt(root.variant, root.variantIntensity * 2)
       }

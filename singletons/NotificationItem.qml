@@ -7,6 +7,8 @@ QtObject {
   required property list<Notification> parent
 
   readonly property real defaultTimeout: 5
+  readonly property string appName: notification.appName
+  readonly property string appIcon: notification.appIcon
   readonly property string image: notification.image
   readonly property string summary: notification.summary
   readonly property string body: notification.body

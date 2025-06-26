@@ -1,6 +1,5 @@
 import Quickshell
 import QtQuick
-import Quickshell.Hyprland
 import "root:/singletons"
 
 Item {
@@ -14,12 +13,6 @@ Item {
   PersistentProperties {
     id: persist
     property Item selectedPanel
-  }
-
-  HyprlandFocusGrab {
-    id: focusGrab
-    windows: [this.QsWindow.window]
-    active: root.selectedPanel !== null
   }
 
   transitions: Transition {
