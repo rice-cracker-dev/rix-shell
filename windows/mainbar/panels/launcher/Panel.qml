@@ -1,6 +1,5 @@
 import Quickshell
 import Quickshell.Io
-import Quickshell.Widgets
 import QtQuick
 import "root:/components"
 import "root:/singletons"
@@ -13,6 +12,15 @@ BarPanelItem {
   onIsSelectedChanged: {
     if (isSelected) {
       inputField.text = "";
+    }
+  }
+
+  HyprlandShortcut {
+    name: "toggle_launcher"
+    description: "Toggle launcher"
+
+    onPressed: {
+      root.panel.togglePanel(root);
     }
   }
 
