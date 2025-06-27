@@ -11,11 +11,12 @@ Item {
   x: 100
   clip: true
   focus: true
-  anchors.fill: parent
+  implicitWidth: 400
 
   anchors {
-    fill: root.panel
-    margins: 8
+    top: panel.top
+    bottom: panel.bottom
+    left: panel.left
   }
 
   states: State {

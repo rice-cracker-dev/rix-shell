@@ -1,6 +1,5 @@
 import Quickshell
 import QtQuick
-import QtQuick.Layouts
 import QtQuick.Controls
 import "root:/singletons"
 import "root:/components"
@@ -45,7 +44,7 @@ Item {
   }
 
   ListView {
-    spacing: 16
+    spacing: 8
     clip: true
 
     anchors {
@@ -60,104 +59,8 @@ Item {
       values: [...Notifications.notifications]
     }
 
-    delegate: Item {
-      id: itemRoot
-      required property var modelData
-
+    delegate: NotificationContent {
       implicitWidth: ListView.view.width
-      implicitHeight: childrenRect.height
-      clip: true
-
-      Item {
-        id: image
-        property int size: itemRoot.modelData.image ? 48 : 0
-
-        visible: !!itemRoot.modelData.image
-        implicitWidth: size
-        implicitHeight: size
-
-        anchors {
-          top: itemRoot.top
-          right: itemRoot.right
-        }
-
-        Image {
-          anchors.fill: parent
-
-          source: itemRoot.modelData.image
-
-          sourceSize {
-            width: image.width
-            height: image.height
-          }
-        }
-      }
-
-      Item {
-        id: itemApp
-        implicitHeight: childrenRect.height
-        opacity: 0.5
-
-        anchors {
-          bottom: labelSummary.top
-          left: parent.left
-          right: image.visible ? image.left : itemRoot.right
-          rightMargin: image.visible ? 8 : 0
-        }
-
-        Icon {
-          id: appIcon
-          icon: Quickshell.iconPath(itemRoot.modelData.appIcon)
-          size: !!itemRoot.modelData.appIcon ? 16 : 0
-          color: appLabel.color
-          anchors.left: parent.left
-        }
-
-        Label {
-          id: appLabel
-          text: itemRoot.modelData.appName
-
-          anchors {
-            leftMargin: !!itemRoot.modelData.appIcon ? 8 : 0
-            left: appIcon.right
-          }
-        }
-      }
-
-      Label {
-        id: labelSummary
-
-        text: itemRoot.modelData.summary
-        elide: Text.ElideRight
-
-        font {
-          weight: 500
-          pixelSize: 16
-        }
-
-        anchors {
-          bottom: image.visible ? image.bottom : null
-          left: itemRoot.left
-          right: image.visible ? image.left : itemRoot.right
-          rightMargin: !!image.visible ? 8 : 0
-        }
-      }
-
-      Label {
-        id: labelBody
-
-        text: itemRoot.modelData.body
-        textFormat: Text.MarkdownText
-        wrapMode: Text.Wrap
-        opacity: 0.75
-
-        anchors {
-          topMargin: image.visible ? 8 : 0
-          top: labelSummary.bottom
-          left: itemRoot.left
-          right: itemRoot.right
-        }
-      }
     }
   }
 }

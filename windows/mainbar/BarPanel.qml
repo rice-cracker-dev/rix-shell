@@ -6,6 +6,8 @@ Item {
   id: root
   property alias selectedPanel: persist.selectedPanel
 
+  clip: true
+
   function togglePanel(panel: Item) {
     this.selectedPanel = this.selectedPanel === panel ? null : panel;
   }

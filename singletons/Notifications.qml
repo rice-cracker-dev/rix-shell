@@ -21,6 +21,7 @@ Singleton {
 
     onNotification: notif => {
       notif.tracked = true;
+      console.log(notif.appIcon);
       persist.notifications.push(notifComponent.createObject(root, {
         notification: notif,
         parent: persist.notifications

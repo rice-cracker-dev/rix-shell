@@ -16,7 +16,7 @@ WrapperRectangle {
   readonly property url iconMusicNote: Qt.resolvedUrl("root:/assets/icons/music-note.svg")
   readonly property url iconMusicNoteOff: Qt.resolvedUrl("root:/assets/icons/music-note-off.svg")
 
-  color: "transparent"
+  color: Color.colorA(Theme.color.surface_variant, 0)
   radius: 9999
 
   states: [

@@ -32,6 +32,10 @@ PanelWindow {
     id: focusGrab
     windows: [window]
     active: false
+
+    onCleared: {
+      barPanel.selectedPanel = null;
+    }
   }
 
   mask: Region {
@@ -192,7 +196,7 @@ PanelWindow {
         states: State {
           when: !!barPanel.selectedPanel
           PropertyChanges {
-            barPanel.width: 400
+            barPanel.width: barPanel.childrenRect.width
           }
         }
 

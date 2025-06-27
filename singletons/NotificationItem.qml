@@ -12,6 +12,7 @@ QtObject {
   readonly property string image: notification.image
   readonly property string summary: notification.summary
   readonly property string body: notification.body
+  readonly property NotificationAction actions: notification.actions
   property bool show: true
 
   readonly property Timer timer: Timer {
@@ -23,7 +24,7 @@ QtObject {
   }
 
   readonly property Connections connections: Connections {
-    target: notif.notification.Retainable
+    target: root.notification.Retainable
 
     function onDropped(): void {
       root.parent.splice(root.list.indexOf(notif), 1);

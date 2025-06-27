@@ -1,14 +1,22 @@
+import QtQuick
 import "../.."
 
 BarPanelItem {
   id: root
 
-  NotificationArea {
+  Item {
     anchors {
-      top: root.top
-      bottom: root.bottom
-      left: root.left
-      right: root.right
+      fill: root
+      margins: 8
+    }
+
+    NotificationArea {
+      anchors {
+        top: parent.top
+        bottom: parent.bottom
+        left: parent.left
+        right: parent.right
+      }
     }
   }
 }
