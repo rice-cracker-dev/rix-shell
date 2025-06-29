@@ -1,9 +1,11 @@
 import QtQuick
 import "root:/components"
+import "../.."
 
 VariantButton {
   id: rootItem
   required property var modelData
+  required property BarPanel panel
 
   implicitWidth: ListView.view.width
   padding: 8
@@ -14,7 +16,7 @@ VariantButton {
 
   onClicked: {
     modelData.action();
-    panelRoot.panel.selectedPanel = null;
+    rootItem.panel.selectedPanel = null;
   }
 
   contentItem: Item {

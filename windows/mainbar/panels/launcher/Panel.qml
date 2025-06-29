@@ -178,6 +178,8 @@ BarPanelItem {
       }
     }
 
-    delegate: SearchItem {}
+    delegate: SearchItem {
+      panel: root.panel
+    }
   }
 }

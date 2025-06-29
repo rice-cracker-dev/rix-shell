@@ -14,5 +14,14 @@ QtObject {
   property string body: notification?.body ?? ""
   property list<NotificationAction> actions: notification?.actions ?? []
   property int urgency: notification?.urgency ?? NotificationUrgency.Normal
+
   property Timer timer
+
+  property Connections connections: Connections {
+    target: root.notification
+
+    function onClosed() {
+      Notifications.notifications.splice(Notifications.notifications.indexOf(root), 1);
+    }
+  }
 }

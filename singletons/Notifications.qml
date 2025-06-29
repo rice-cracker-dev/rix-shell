@@ -21,6 +21,11 @@ Singleton {
 
     actionIconsSupported: true
     actionsSupported: true
+    bodyHyperlinksSupported: true
+    bodyImagesSupported: true
+    bodyMarkupSupported: true
+    imageSupported: true
+    persistenceSupported: true
     keepOnReload: false
 
     onNotification: notif => {
@@ -28,8 +33,6 @@ Singleton {
       persist.notifications.push(notifComponent.createObject(root, {
         notification: notif
       }));
-
-      console.log(notif.actions.length);
     }
   }
 

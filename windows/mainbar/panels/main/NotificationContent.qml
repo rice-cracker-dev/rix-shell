@@ -1,9 +1,8 @@
 import QtQuick
-import QtQuick.Controls
 import Quickshell
 import Quickshell.Widgets
 import Quickshell.Services.Notifications
-import "root:/components" as Components
+import "root:/components"
 import "root:/singletons"
 
 WrapperRectangle {
@@ -63,7 +62,7 @@ WrapperRectangle {
           verticalCenter: itemImage.visible ? itemImage.verticalCenter : itemHeader.verticalCenter
         }
 
-        Components.Label {
+        Label {
           id: labelSummary
           text: root.modelData.summary
           elide: Text.ElideRight
@@ -92,7 +91,7 @@ WrapperRectangle {
             right: labelsHeader.right
           }
 
-          Components.Icon {
+          Icon {
             id: iconApp
 
             icon: root.modelData.appIcon.trim() !== "" ? Quickshell.iconPath(root.modelData.appIcon) : Qt.resolvedUrl("root:/assets/icons/bell.svg")
@@ -105,7 +104,7 @@ WrapperRectangle {
             }
           }
 
-          Components.Label {
+          Label {
             id: labelApp
 
             text: root.modelData.appName
@@ -122,7 +121,7 @@ WrapperRectangle {
       }
     }
 
-    Components.Label {
+    Label {
       id: labelBody
 
       text: root.modelData.body
@@ -153,29 +152,35 @@ WrapperRectangle {
       Repeater {
         model: root.modelData.actions
 
-        delegate: MouseArea {
+        delegate: Button {
           id: actionButton
           required property NotificationAction modelData
-          property color color: Theme.color.primary
+          backgroundOpacity: 0
+          backgroundColor: Theme.color.primary
+          color: Theme.color.primary
 
-          hoverEnabled: true
-          implicitWidth: childrenRect.width
-          implicitHeight: childrenRect.height
-
-          onContainsMouseChanged: {
-            console.log(actionButton.containsMouse);
+          onPressed: {
+            modelData.invoke();
           }
 
-          WrapperRectangle {
-            id: actionButtonRect
-
-            margin: 8
-            color: Color.colorA(Theme.color.primary, actionButton.containsMouse ? 0.1 : 0)
-
-            Components.Label {
-              color: actionButton.color
-              text: actionButton.modelData.text
+          states: [
+            State {
+              when: actionButton.pressed
+              PropertyChanges {
+                actionButton.backgroundOpacity: 0.1
+              }
+            },
+            State {
+              when: actionButton.hovered
+              PropertyChanges {
+                actionButton.backgroundOpacity: 0.05
+              }
             }
+          ]
+
+          contentItem: Label {
+            color: actionButton.color
+            text: actionButton.modelData.text
           }
         }
       }

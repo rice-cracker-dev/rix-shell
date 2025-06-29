@@ -56,7 +56,7 @@ Item {
     }
 
     model: ScriptModel {
-      values: [...Notifications.notifications].filter(notif => !!notif.notification).reverse()
+      values: [...Notifications.notifications].reverse()
     }
 
     delegate: NotificationContent {

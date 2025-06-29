@@ -8,6 +8,7 @@ Item {
   default property list<QtObject> children: []
 
   enabled: isSelected
+  z: isSelected ? 10 : 0
   opacity: 0
   x: 100
   clip: true
