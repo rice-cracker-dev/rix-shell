@@ -3,35 +3,16 @@ import QtQuick
 
 QtObject {
   id: root
-  required property Notification notification
-  required property list<Notification> parent
 
-  readonly property real defaultTimeout: 5
-  readonly property string appName: notification.appName
-  readonly property string appIcon: notification.appIcon
-  readonly property string image: notification.image
-  readonly property string summary: notification.summary
-  readonly property string body: notification.body
-  readonly property NotificationAction actions: notification.actions
-  property bool show: true
-
-  readonly property Timer timer: Timer {
-    running: true
-    interval: notification.expireTimeout > 0 ? notification.expireTimeout : root.defaultTimeout
-    onTriggered: {
-      root.show = false;
-    }
-  }
-
-  readonly property Connections connections: Connections {
-    target: root.notification.Retainable
-
-    function onDropped(): void {
-      root.parent.splice(root.list.indexOf(notif), 1);
-    }
-
-    function onAboutToDestroy(): void {
-      root.destroy();
-    }
-  }
+  property Notification notification
+  property bool popup: true
+  property int id: notification?.id ?? 0
+  property string appName: notification?.appName ?? ""
+  property string appIcon: notification?.appIcon ?? ""
+  property string image: notification?.image ?? ""
+  property string summary: notification?.summary ?? ""
+  property string body: notification?.body ?? ""
+  property list<NotificationAction> actions: notification?.actions ?? []
+  property int urgency: notification?.urgency ?? NotificationUrgency.Normal
+  property Timer timer
 }

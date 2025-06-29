@@ -20,14 +20,14 @@ Singleton {
       }
     }
 
-    onExited: exitCode => {
+    onExited: (exitCode, _) => {
       main.code = exitCode;
     }
   }
 
   function calculateExpression(expr) {
-    proc.signal(9);
-    proc.command = ["qalc", "-t", expr];
-    proc.running = true;
+    proc.exec({
+      command: ["qalc", "-t", expr]
+    });
   }
 }

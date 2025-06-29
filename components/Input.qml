@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Controls
 import "root:/singletons"
-import "root:/singletons/utils"
 
 TextField {
   id: root

@@ -6,7 +6,6 @@ import QtQuick.Layouts
 import QtQuick.Effects
 import "root:/components"
 import "root:/singletons"
-import "root:/singletons/utils"
 import "./panels/launcher" as Launcher
 import "./panels/main" as Main
 
@@ -161,6 +160,10 @@ PanelWindow {
             contentItem: ColumnLayout {
               spacing: 12
 
+              Main.BarNotificationIcon {
+                color: mainButton.color
+                Layout.alignment: Qt.AlignHCenter
+              }
               NetworkWidget {
                 color: mainButton.color
                 Layout.alignment: Qt.AlignHCenter
@@ -196,7 +199,7 @@ PanelWindow {
         states: State {
           when: !!barPanel.selectedPanel
           PropertyChanges {
-            barPanel.width: barPanel.childrenRect.width
+            barPanel.width: barPanel.selectedPanel.width
           }
         }
 

@@ -8,6 +8,8 @@ Singleton {
 
   readonly property alias notifications: persist.notifications
 
+  signal notify(NotificationItem item)
+
   PersistentProperties {
     id: persist
 
@@ -17,15 +19,17 @@ Singleton {
   NotificationServer {
     id: server
 
-    keepOnReload: true
+    actionIconsSupported: true
+    actionsSupported: true
+    keepOnReload: false
 
     onNotification: notif => {
       notif.tracked = true;
-      console.log(notif.appIcon);
       persist.notifications.push(notifComponent.createObject(root, {
-        notification: notif,
-        parent: persist.notifications
+        notification: notif
       }));
+
+      console.log(notif.actions.length);
     }
   }
 

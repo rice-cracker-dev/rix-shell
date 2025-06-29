@@ -1,6 +1,5 @@
 import QtQuick
 import "root:/singletons"
-import "root:/singletons/utils"
 
 Button {
   id: root

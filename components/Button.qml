@@ -22,5 +22,9 @@ Button {
       properties: "backgroundColor,color"
       duration: 150
     }
+    NumberAnimation {
+      properties: "backgroundOpacity"
+      duration: 150
+    }
   }
 }

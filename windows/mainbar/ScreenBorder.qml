@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Effects
 import "root:/singletons"
-import "root:/singletons/utils"
 
 Item {
   id: root

@@ -4,7 +4,6 @@ import QtQuick
 import QtQuick.Controls
 import "root:/components"
 import "root:/singletons"
-import "root:/singletons/utils"
 
 WrapperRectangle {
   id: root

@@ -5,6 +5,7 @@ Item {
 
   readonly property BarPanel panel: root.parent
   readonly property bool isSelected: panel.selectedPanel === root
+  default property list<QtObject> children: []
 
   enabled: isSelected
   opacity: 0
@@ -31,6 +32,17 @@ Item {
     NumberAnimation {
       properties: "opacity"
       duration: 150
+    }
+  }
+
+  Item {
+    id: wrapper
+
+    children: root.children
+
+    anchors {
+      fill: parent
+      margins: 8
     }
   }
 }

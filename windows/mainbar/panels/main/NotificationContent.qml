@@ -1,10 +1,10 @@
 import QtQuick
+import QtQuick.Controls
 import Quickshell
 import Quickshell.Widgets
 import Quickshell.Services.Notifications
-import "root:/components"
+import "root:/components" as Components
 import "root:/singletons"
-import "root:/singletons/utils"
 
 WrapperRectangle {
   id: root
@@ -16,10 +16,6 @@ WrapperRectangle {
   radius: 16
   margin: 16
 
-  anchors {
-    bottom: root.bottom
-  }
-
   Item {
     id: itemRoot
 
@@ -28,7 +24,7 @@ WrapperRectangle {
     Item {
       id: itemHeader
 
-      implicitHeight: childrenRect.height
+      implicitHeight: Math.max(48, labelsHeader.height)
 
       anchors {
         left: itemRoot.left
@@ -67,7 +63,7 @@ WrapperRectangle {
           verticalCenter: itemImage.visible ? itemImage.verticalCenter : itemHeader.verticalCenter
         }
 
-        Label {
+        Components.Label {
           id: labelSummary
           text: root.modelData.summary
           elide: Text.ElideRight
@@ -96,7 +92,7 @@ WrapperRectangle {
             right: labelsHeader.right
           }
 
-          Icon {
+          Components.Icon {
             id: iconApp
 
             icon: root.modelData.appIcon.trim() !== "" ? Quickshell.iconPath(root.modelData.appIcon) : Qt.resolvedUrl("root:/assets/icons/bell.svg")
@@ -109,7 +105,7 @@ WrapperRectangle {
             }
           }
 
-          Label {
+          Components.Label {
             id: labelApp
 
             text: root.modelData.appName
@@ -126,7 +122,7 @@ WrapperRectangle {
       }
     }
 
-    Label {
+    Components.Label {
       id: labelBody
 
       text: root.modelData.body
@@ -144,18 +140,42 @@ WrapperRectangle {
       }
     }
 
-    Column {
+    Row {
       spacing: 8
+
+      anchors {
+        topMargin: 8
+        top: labelBody.bottom
+        left: itemRoot.left
+        right: itemRoot.right
+      }
 
       Repeater {
         model: root.modelData.actions
 
-        delegate: VariantButton {
+        delegate: MouseArea {
           id: actionButton
           required property NotificationAction modelData
+          property color color: Theme.color.primary
 
-          contentItem: Label {
-            text: actionButton.modelData.text
+          hoverEnabled: true
+          implicitWidth: childrenRect.width
+          implicitHeight: childrenRect.height
+
+          onContainsMouseChanged: {
+            console.log(actionButton.containsMouse);
+          }
+
+          WrapperRectangle {
+            id: actionButtonRect
+
+            margin: 8
+            color: Color.colorA(Theme.color.primary, actionButton.containsMouse ? 0.1 : 0)
+
+            Components.Label {
+              color: actionButton.color
+              text: actionButton.modelData.text
+            }
           }
         }
       }
