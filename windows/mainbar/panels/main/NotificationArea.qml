@@ -43,7 +43,7 @@ Item {
     }
   }
 
-  ListView {
+  TransitionListView {
     spacing: 8
     clip: true
 

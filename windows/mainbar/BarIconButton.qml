@@ -5,11 +5,15 @@ BarButton {
   id: root
   required property url iconUrl
 
-  padding: 8
+  implicitHeight: this.implicitWidth
 
-  contentItem: Icon {
-    icon: root.iconUrl
-    size: 16
-    color: root.color
+  contentItem: Item {
+    Icon {
+      anchors.centerIn: parent
+
+      icon: root.iconUrl
+      size: 16
+      color: root.color
+    }
   }
 }

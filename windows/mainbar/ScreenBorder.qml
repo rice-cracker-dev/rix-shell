@@ -51,7 +51,7 @@ Item {
     radius: maskRect.radius
 
     border {
-      color: Color.colorA(Theme.color.outline_variant, 0.59)
+      color: Color.colorA(Theme.color.outline_variant, 0.50)
       width: 1
     }
 

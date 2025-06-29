@@ -5,7 +5,7 @@ import Quickshell.Widgets
 Item {
   id: main
   required property url icon
-  required property int size
+  property int size: 16
   property bool colorEnabled: true
   property color color: "#000000"
 

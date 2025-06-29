@@ -5,7 +5,6 @@ import "../.."
 VariantButton {
   id: rootItem
   required property var modelData
-  required property BarPanel panel
 
   implicitWidth: ListView.view.width
   padding: 8
@@ -16,7 +15,7 @@ VariantButton {
 
   onClicked: {
     modelData.action();
-    rootItem.panel.selectedPanel = null;
+    MainbarService.selectedPanel = null;
   }
 
   contentItem: Item {

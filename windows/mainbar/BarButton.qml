@@ -4,5 +4,6 @@ VariantButton {
   ghost: true
   backgroundOpacity: 0.5
   radius: 9999
-  padding: 4
+  implicitWidth: 34
+  padding: 0
 }

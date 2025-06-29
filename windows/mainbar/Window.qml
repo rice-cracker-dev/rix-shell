@@ -27,13 +27,21 @@ PanelWindow {
   color: 'transparent'
   visible: Theme.loaded
 
+  Connections {
+    target: MainbarService
+
+    function onSelectedPanelChanged() {
+      focusGrab.active = MainbarService.selectedPanel !== null;
+    }
+  }
+
   HyprlandFocusGrab {
     id: focusGrab
     windows: [window]
     active: false
 
     onCleared: {
-      barPanel.selectedPanel = null;
+      MainbarService.selectedPanel = null;
     }
   }
 
@@ -46,8 +54,8 @@ PanelWindow {
     anchors.fill: parent
 
     Keys.onEscapePressed: {
-      if (barPanel.selectedPanel !== null) {
-        barPanel.selectedPanel = null;
+      if (MainbarService.selectedPanel !== null) {
+        MainbarService.selectedPanel = null;
       }
     }
 
@@ -69,7 +77,7 @@ PanelWindow {
     MouseArea {
       id: panelOverlay
 
-      onPressed: (barPanel.selectedPanel = null)
+      onPressed: (MainbarService.selectedPanel = null)
 
       anchors {
         fill: parent
@@ -83,7 +91,7 @@ PanelWindow {
         opacity: 0
 
         states: State {
-          when: barPanel.selectedPanel !== null
+          when: MainbarService.selectedPanel !== null
           PropertyChanges {
             panelOverlayRect.opacity: 0.25
           }
@@ -121,10 +129,6 @@ PanelWindow {
             bottomMargin: window.barMargins
           }
 
-          MprisWidget {
-            Layout.alignment: Qt.AlignHCenter
-          }
-
           SpacerLayout {}
 
           ColumnLayout {
@@ -136,8 +140,8 @@ PanelWindow {
             BarIconButton {
               variant: "primary"
               iconUrl: Qt.resolvedUrl("root:/assets/icons/magnify.svg")
-              active: barPanel.selectedPanel === launcherPanel
-              onClicked: barPanel.togglePanel(launcherPanel)
+              active: MainbarService.selectedPanel === launcherPanel
+              onClicked: MainbarService.togglePanel(launcherPanel)
             }
           }
 
@@ -149,15 +153,17 @@ PanelWindow {
           BarButton {
             id: mainButton
             variant: "primary"
-            active: barPanel.selectedPanel === mainPanel
-            padding: 8
+            active: MainbarService.selectedPanel === mainPanel
+            topPadding: 12
+            bottomPadding: 12
             Layout.alignment: Qt.AlignHCenter
 
             onClicked: {
-              barPanel.togglePanel(mainPanel);
+              MainbarService.togglePanel(mainPanel);
             }
 
             contentItem: ColumnLayout {
+              id: mainItem
               spacing: 12
 
               Main.BarNotificationIcon {
@@ -192,14 +198,10 @@ PanelWindow {
           right: barRoot.left
         }
 
-        onSelectedPanelChanged: {
-          focusGrab.active = selectedPanel !== null;
-        }
-
         states: State {
-          when: !!barPanel.selectedPanel
+          when: !!MainbarService.selectedPanel
           PropertyChanges {
-            barPanel.width: barPanel.selectedPanel.width
+            barPanel.width: MainbarService.selectedPanel.width
           }
         }
 

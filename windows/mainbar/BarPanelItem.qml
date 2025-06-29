@@ -3,8 +3,7 @@ import QtQuick
 Item {
   id: root
 
-  readonly property BarPanel panel: root.parent
-  readonly property bool isSelected: panel.selectedPanel === root
+  readonly property bool isSelected: MainbarService.selectedPanel === root
   default property list<QtObject> children: []
 
   enabled: isSelected
@@ -16,9 +15,9 @@ Item {
   implicitWidth: 400
 
   anchors {
-    top: panel.top
-    bottom: panel.bottom
-    left: panel.left
+    top: parent.top
+    bottom: parent.bottom
+    left: parent.left
   }
 
   states: State {

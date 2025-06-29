@@ -38,6 +38,9 @@
           qtbase
           qtdeclarative
           qtmultimedia
+          pkgs.kdePackages.qqc2-desktop-style
+          pkgs.kdePackages.kirigami.passthru.unwrapped
+          pkgs.kdePackages.sonnet
         ];
       in {
         packages = {

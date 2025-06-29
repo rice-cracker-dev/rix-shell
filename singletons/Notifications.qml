@@ -7,6 +7,9 @@ Singleton {
   id: root
 
   readonly property alias notifications: persist.notifications
+  readonly property alias popups: persist.popups
+  property int defaultTimeout: 10000
+  property int maxTimeout: 15000 // fuckoff flameshot
 
   signal notify(NotificationItem item)
 
@@ -14,6 +17,7 @@ Singleton {
     id: persist
 
     property list<NotificationItem> notifications: []
+    property list<NotificationItem> popups: []
   }
 
   NotificationServer {
@@ -30,9 +34,12 @@ Singleton {
 
     onNotification: notif => {
       notif.tracked = true;
-      persist.notifications.push(notifComponent.createObject(root, {
+      const notifObject = notifComponent.createObject(root, {
         notification: notif
-      }));
+      });
+
+      persist.popups.push(notifObject);
+      persist.notifications.push(notifObject);
     }
   }
 

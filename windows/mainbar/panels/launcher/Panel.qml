@@ -21,7 +21,7 @@ BarPanelItem {
     description: "Toggle launcher"
 
     onPressed: {
-      root.panel.togglePanel(root);
+      MainbarService.togglePanel(root);
     }
   }
 
@@ -29,17 +29,17 @@ BarPanelItem {
     target: "launcher"
 
     function open(): void {
-      root.panel.selectedPanel = root;
+      MainbarService.selectedPanel = root;
     }
 
     function close(): void {
       if (root.isSelected) {
-        root.panel.selectedPanel = null;
+        MainbarService.selectedPanel = null;
       }
     }
 
     function toggle(): void {
-      root.panel.togglePanel(root);
+      MainbarService.togglePanel(root);
     }
   }
 
@@ -178,8 +178,6 @@ BarPanelItem {
       }
     }
 
-    delegate: SearchItem {
-      panel: root.panel
-    }
+    delegate: SearchItem {}
   }
 }

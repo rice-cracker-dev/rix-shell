@@ -9,16 +9,31 @@ WrapperRectangle {
   id: root
 
   required property NotificationItem modelData
+  property Timer timer
   property int imageSize
 
   color: Color.colorA(Theme.color.surface_container, 0.5)
   radius: 16
   margin: 16
 
-  Item {
+  states: [
+    State {
+      when: itemRoot.containsMouse
+      PropertyChanges {
+        root.color: Color.colorA(Theme.color.surface_container, 0.75)
+      }
+    }
+  ]
+
+  MouseArea {
     id: itemRoot
 
     implicitHeight: childrenRect.height
+    hoverEnabled: true
+
+    onClicked: {
+      root.modelData.notification?.dismiss();
+    }
 
     Item {
       id: itemHeader
